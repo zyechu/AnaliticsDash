@@ -1,0 +1,4 @@
+cepik_connector.py - is a script to get data from API - https://api.cepik.gov.pl
+
+To launch a dash you need to do execute this line in terminal:
+streamlit run main.py
