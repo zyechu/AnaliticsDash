@@ -35,7 +35,7 @@ paths_for_data = find_paths_for_data()
 #Bar Chart
 
 
-@st.cache(persist=True)
+@st.cache(persist=False)
 def load_data(paths_list):
     # wczytanie pierwszej ścieżki z listy
     # data = pd.read_csv(paths_list[0],index_col=0)
@@ -197,14 +197,14 @@ df_count_per_day = df_count_per_day.reset_index()
 # Bar Chart presenting the number of registration per day
 chart = alt.Chart(df_count_per_day).mark_bar().encode(
             x=alt.X('data:T', title='Data'),
-            y=alt.Y('liczba:Q', title='Number of registration per day')
+            y=alt.Y('liczba:Q', title='Daily number of registration')
         )
 st.altair_chart(chart, use_container_width=True)
 
 # Line Chart presenting the number of registration per day
 chart = alt.Chart(df_count_per_day).mark_line().encode(
             x=alt.X('data:T', title='Data'),
-            y=alt.Y('liczba:Q', title='Number of registration per day')
+            y=alt.Y('liczba:Q', title='Daily number of registration')
         )
 chart = chart + chart.transform_regression('index', 'y').mark_line()
 st.altair_chart(chart, use_container_width=True)

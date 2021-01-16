@@ -1,4 +1,30 @@
 cepik_connector.py - is a script to get data from API - https://api.cepik.gov.pl
+main.py - is a script to create a dash
+
+Data period:
+2019-09-01 - 2019-12-31
+
+You can change the date in following lines:
+data_start = "20190901"
+data_end = "20191231"
+
+Data which we getting from API:
+- branch - "marka",
+- model - "model",
+- vehicle type - "rodzaj-pojazdu",
+- vehicle body - "podrodzaj-pojazdu",
+- vehicle orgin - "pochodzenie-pojazdu",
+- production method - "sposob-produkcji"-,
+- year of production - "rok-produkcji",
+- date of first registration in country - "data-pierwszej-rejestracji-w-kraju",
+- date of registration abroad - "data-rejestracji-za-granica",
+- engine capacity - "pojemnosc-skokowa-silnika",
+- engine power (HP) - "moc-netto-silnika",
+- weight -  "masa-wlasna",
+- number of seats - "liczba-miejsc-ogolem",
+- fuel type - "rodzaj-paliwa",
+- right-hand drive - "kierownica-po-prawej-stronie",
+- voivodeship - "rejestracja-wojewodztwo"
 
 To launch a dash you need to do execute this line in terminal:
 streamlit run main.py

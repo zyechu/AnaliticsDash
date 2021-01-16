@@ -10,10 +10,10 @@ import sqlite3
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
-data_start = "20190901"
-data_end = "20191231"
+data_start = "20190101"
+data_end = "20190631"
 
-#marka,model,rodzaj-pojazdu,podrodzaj-pojazdu,pochodzenie-pojazdu,sposob-produkcji,rok-produkcji,
+# marka,model,rodzaj-pojazdu,podrodzaj-pojazdu,pochodzenie-pojazdu,sposob-produkcji,rok-produkcji,
 # data-pierwszej-rejestracji-w-kraju,data-rejestracji-za-granica,pojemnosc-skokwa-silnika,moc-netto-silnika,
 # masa-wlasna,liczba-miejsc-ogolem,rodzaj-paliwa,kierownica-po-prawej-stronie,rejestracja-wojewodztwo
 
@@ -80,8 +80,8 @@ def get_cars_dataframe(voivodeships):
             except:
                 print("Unexpected error:", sys.exc_info()[0])
                 pass
-        save_name = "woj_"+key
-        df.to_csv(save_name)
+        save_name = "woj_"+key+".csv"
+        df.to_csv(f'data/'+save_name)
 
 suma = 0
 v = get_voivodeship_dictionary()
