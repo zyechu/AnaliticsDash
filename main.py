@@ -22,10 +22,14 @@ def find_paths_for_data():
     for files in glob.glob("data/*.csv"):
         # splitter = "data\\"
         base = f'data'+'/'
-        splited_files = base + files.split("data\\")[1]
-        woj_list.append(splited_files)
+        files = files.replace("\\", "/")
+        # print(files)
+        # splited_files = base + files.split("data\\")[1]
+        # print(splited_files)
+        woj_list.append(files)
     return woj_list
 paths_for_data = find_paths_for_data()
+# print(paths_for_data )
 # print(paths_for_data)
 #
 # DATA_URL = 'data\woj_DOLNOŚLĄSKIE.csv'
@@ -50,6 +54,22 @@ def load_data(paths_list):
 
     # add new column moc-do-masy
     data['moc-do-masy'] = data['moc-netto-silnika'] / data['masa-wlasna']
+    # data cleaning
+    data = data[data['rok-produkcji'].notnull()]
+    data['rok-produkcji_clear'] = [
+        x[1] if x[0] == 'FABRYCZNY' or x[0] == 'PRODUKCJA JEDNOSTKOWA' or x[0] == "ZABYTKOWY" else x[0] for x in
+        zip(data['rok-produkcji'], data['sposob-produkcji'])]
+    data['sposob-produkcji_clear'] = [
+        x[1] if x[1] == 'FABRYCZNY' or x[1] == 'PRODUKCJA JEDNOSTKOWA' or x[1] == "ZABYTKOWY" else x[0] for x in
+        zip(data['rok-produkcji'], data['sposob-produkcji'])]
+    data['rok-produkcji'] = data['rok-produkcji_clear']
+    data['sposob-produkcji'] = data['sposob-produkcji_clear']
+    del data['sposob-produkcji_clear']
+    del data['rok-produkcji_clear']
+    data['rok-produkcji'] = data['rok-produkcji'].astype('int32')
+    data['wiek_auta'] = int(2019) - data['rok-produkcji']
+    types = ['FABRYCZNY', 'PRODUKCJA JEDNOSTKOWA', 'ZABYTKOWY']
+    data = data[data['sposob-produkcji'].isin(types)]
     return data
 
 
@@ -127,6 +147,7 @@ st.subheader('Look into 10 rows of raw data')
 st.write(data.head(10))
 
 def count_per_day(df):
+    dti = pd.date_range("2019-01-02", end='2019-06-28', freq="D")
     pd.to_datetime(df['data-pierwszej-rejestracji-w-kraju'], format='%Y-%m-%d', errors='raise')
     dates = df['data-pierwszej-rejestracji-w-kraju']
     dates = dates.value_counts(sort = False)
@@ -166,15 +187,13 @@ if select_status != 'Wszystkie':
 
     select_to_pie = st.selectbox("Select a column to make a pie chart", column_to_pie_chart)
 
+    try:
+        st.bokeh_chart(draw_pie_chart(data, select_to_pie), use_container_width=False)
+    except:
+        print("PIE CHART ERROR")
+        st.text("Pie chart can't be loaded")
 
-# draw_pie_chart(data, select_to_pie)
-try:
-    st.bokeh_chart(draw_pie_chart(data, select_to_pie), use_container_width=False)
-except:
-    print("PIE CHART ERROR")
-    st.text("Pie chart can't be loaded")
-
-count_per_vehicle_type = count_per_col(data,'podrodzaj-pojazdu')
+count_per_vehicle_type = count_per_col(data, 'podrodzaj-pojazdu')
 # count_per_vehicle_type = pd.DataFrame(count_per_vehicle_type)
 count_per_vehicle_type = count_per_vehicle_type.reset_index()
 
@@ -191,7 +210,18 @@ df_count_per_day = count_per_day(data)
 df_count_per_day = pd.DataFrame(df_count_per_day)
 df_count_per_day = df_count_per_day.reset_index()
 df_count_per_day.columns = ['data', 'liczba']
-df_count_per_day['data'] = pd.to_datetime(df_count_per_day['data'])
+df_count_per_day['data'] = df_count_per_day['data'].astype('object')
+# print(df_count_per_day)
+# dates = pd.date_range(start='2019-01-01', end='2019-06-30', freq='d')
+# dates = pd.DataFrame(dates)
+# dates.columns = ['data']
+# # print(dates)
+# dates['data'] = dates['data'].astype('object')
+# df_merged = pd.merge(dates, df_count_per_day, on='data', how='outer')
+# # df_merged = df_merged.fillna(0)
+# print(len(df_merged))
+# print(df_merged)
+# df_count_per_day['data'] = pd.to_datetime(df_merged['data'])
 df_count_per_day = df_count_per_day.reset_index()
 
 # Bar Chart presenting the number of registration per day
@@ -199,6 +229,8 @@ chart = alt.Chart(df_count_per_day).mark_bar().encode(
             x=alt.X('data:T', title='Data'),
             y=alt.Y('liczba:Q', title='Daily number of registration')
         )
+
+# chart = chart + chart.transform_regression('index', 'y').mark_line()
 st.altair_chart(chart, use_container_width=True)
 
 # Line Chart presenting the number of registration per day
@@ -206,7 +238,6 @@ chart = alt.Chart(df_count_per_day).mark_line().encode(
             x=alt.X('data:T', title='Data'),
             y=alt.Y('liczba:Q', title='Daily number of registration')
         )
-chart = chart + chart.transform_regression('index', 'y').mark_line()
 st.altair_chart(chart, use_container_width=True)
 
 
