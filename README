@@ -1,5 +1,11 @@
+Project description:
+
+Files:
+
 cepik_connector.py - is a script to get data from API - https://api.cepik.gov.pl
 main.py - is a script to create a dash
+
+
 
 Data period:
 2019-09-01 - 2019-12-31
@@ -8,7 +14,7 @@ You can change the date in following lines:
 data_start = "20190901"
 data_end = "20191231"
 
-Data which we getting from API:
+Data (columns) which we getting from API:
 - branch - "marka",
 - model - "model",
 - vehicle type - "rodzaj-pojazdu",
