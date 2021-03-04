@@ -1,4 +1,4 @@
-Project description (project is hosted here [link](https://share.streamlit.io/zyechu/analiticsdash/deploy/main.py):
+Project description (project is hosted here [link]:https://share.streamlit.io/zyechu/analiticsdash/deploy/main.py :
 Files:
 
 cepik_connector.py - is a script to get data from API - https://api.cepik.gov.pl
