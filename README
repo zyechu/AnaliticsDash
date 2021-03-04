@@ -2,16 +2,16 @@ Project description (project is hosted here [link]:https://share.streamlit.io/zy
 Files:
 
 cepik_connector.py - is a script to get data from API - https://api.cepik.gov.pl
-main.py - is a script to create a dash
-
+main.py - is a script for a dash, there is need to be completed to get rest of the charts presented in a jupyter notebook
+notebook.ipynb - contains analytics jobs
 
 
 Data period:
-2019-09-01 - 2019-12-31
+2019-01-01 - 2019-06-31
 
 You can change the date in following lines:
-data_start = "20190901"
-data_end = "20191231"
+data_start = "20190101"
+data_end = "20190631"
 
 Data (columns) which are getting from API:
 - branch - "marka",
