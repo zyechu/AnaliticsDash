@@ -14,7 +14,7 @@ You can change the date in following lines:
 data_start = "20190901"
 data_end = "20191231"
 
-Data (columns) which we getting from API:
+Data (columns) which are getting from API:
 - branch - "marka",
 - model - "model",
 - vehicle type - "rodzaj-pojazdu",
